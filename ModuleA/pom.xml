@@ -20,7 +20,6 @@
             <artifactId>ModuleC</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <!-- Додати залежності з Maven Central -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>

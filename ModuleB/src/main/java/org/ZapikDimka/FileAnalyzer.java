@@ -3,15 +3,16 @@ package org.ZapikDimka;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class FileReader {
-    public String readFile(String filePath) throws IOException {
+public class FileAnalyzer {
+    public int countWords(String filePath) throws IOException {
         BufferedReader reader = new BufferedReader(new java.io.FileReader(filePath));
-        StringBuilder content = new StringBuilder();
         String line;
+        int wordCount = 0;
         while ((line = reader.readLine()) != null) {
-            content.append(line).append("\n");
+            String[] words = line.split("\\s+");
+            wordCount += words.length;
         }
         reader.close();
-        return content.toString();
+        return wordCount;
     }
 }

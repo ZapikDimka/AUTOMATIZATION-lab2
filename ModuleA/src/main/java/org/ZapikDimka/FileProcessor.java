@@ -1,43 +1,47 @@
 package org.ZapikDimka;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileProcessor {
     private FileReader fileReader;
-    private FileWriter fileWriter;
+    private CustomFileWriter fileWriter;
+    private FileAnalyzer fileAnalyzer;
+    private FileEncryptor fileEncryptor;
 
-    public FileProcessor(FileReader fileReader, FileWriter fileWriter) {
-        this.fileReader = fileReader;
-        this.fileWriter = fileWriter;
+    public FileProcessor() {
+        this.fileReader = new FileReader();
+        this.fileWriter = new CustomFileWriter();
+        this.fileAnalyzer = new FileAnalyzer();
+        this.fileEncryptor = new FileEncryptor();
     }
 
-    public void processFile(String inputFile, String outputFile) {
-        try {
-            List<String> content = fileReader.readFile(inputFile);
-            List<String> processedContent = processContent(content);
-            fileWriter.writeFile(outputFile, processedContent);
-            System.out.println("File processing completed.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    public void processFiles(String inputFile, String outputFile, String encryptedOutputFile) throws IOException {
+        // Читання файлу
+        String content = fileReader.readFile(inputFile);
 
-    private List<String> processContent(List<String> content) {
-        return content.stream()
-                .map(String::toUpperCase)
-                .collect(Collectors.toList());
+        // Запис файлу
+        fileWriter.writeFile(outputFile, content);
+
+        // Аналіз файлу
+        int wordCount = fileAnalyzer.countWords(inputFile);
+        System.out.println("Word count: " + wordCount);
+
+        // Шифрування файлу
+        fileEncryptor.encryptFile(inputFile, encryptedOutputFile);
+        System.out.println("File encrypted successfully.");
     }
 
     public static void main(String[] args) {
+        FileProcessor processor = new FileProcessor();
+
         String inputFile = "input.txt";
         String outputFile = "output.txt";
+        String encryptedOutputFile = "encrypted_output.txt";
 
-        FileReader reader = new FileReader();
-        FileWriter writer = new FileWriter();
-        FileProcessor processor = new FileProcessor(reader, writer);
-
-        processor.processFile(inputFile, outputFile);
+        try {
+            processor.processFiles(inputFile, outputFile, encryptedOutputFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
